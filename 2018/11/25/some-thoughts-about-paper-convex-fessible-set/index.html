@@ -147,6 +147,13 @@
 
                         
                         <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
                             <a href="/archive/">Archives</a>
                         </li>
                         
@@ -155,13 +162,6 @@
                         
                         <li>
                             <a href="/tags/">Tags</a>
-                        </li>
-                        
-                    
-
-                        
-                        <li>
-                            <a href="/about/">About</a>
                         </li>
                         
                     
@@ -269,7 +269,7 @@
 <ul>
 <li><p><strong><font color="red">Assumption 3:</font></strong><br>1) $\phi_i(x)$是<strong>semi-convex</strong>的，即存在半正定矩阵$H_i^* $，$\forall x, v \in R^n$都有：</p>
 <script type="math/tex; mode=display">\phi_i(x+v)+\phi_i(x-v)-2\phi_i(x) \ge -v^T H_i^* v \tag{6}</script><p>2) 若$D\phi_i(x)$只有一个元素，则该元素不能是0；若$x\in\partial\Gamma_i$，则$0 \notin D\phi_i(x)$<br>3) 所有在边界上的点$x$，都$\exists v \in R^n$，使得$\partial_v\phi_i(x)&lt;0$</p>
-<p>式(6)中若让$H_i^<em> $为0，就变成了凸的条件:可以描述为函数$\phi_i(x)$上任意两点处的函数值的均值要比这两点中点处的函数值大，也等价于任意两点连线上的值都要比函数在两点间的值大.因此式<em>*semi-convex</em></em>感觉像是对凸的一种扩展，允许有局部”凹”，式(6)更一般的形式为：</p>
+<p>式(6)中若让$H_i$为0，就变成了凸的条件:可以描述为函数$\phi_i(x)$上任意两点处的函数值的均值要比这两点中点处的函数值大，也等价于任意两点连线上的值都要比函数在两点间的值大.因此式<strong>semi-convex</strong>感觉像是对凸的一种扩展，允许有局部”凹”，式(6)更一般的形式为：</p>
 <script type="math/tex; mode=display">\phi_i(x+v_1)+\phi_i(x+v_2)-2\phi_i(x+\frac{v_1+v_2}{2}）\ge-(v_1-v_2)^TH_i^* (v_1-v_2))\tag{7}</script><p>甚至可以仿照凸最原始的定义写成：</p>
 <script type="math/tex; mode=display">\lambda\phi_i(x)+(1-\lambda)\phi_i(y)-\phi_i(\lambda x+(1-\lambda)y)\ge\lambda(1-\lambda)(x-y)^TH_i^* (x-y)</script></li>
 <li><p><strong>semi-convex的几条性质</strong><br>$\forall x \in dom\phi_i,\forall v_1,v_2 \in R^n,v=v_1+v_2$都有：<br>1) $\partial_v\phi_i(x)+\partial_{-v}\phi_i(x)\ge 0$<br>2) $b\partial_v\phi_i(x) \ge \partial_{bv}\phi_i(x),\forall b \in R$<br>3) $\partial_{v_1}\phi_i(x)+\partial_{v_2}\phi_i(x)\ge\partial_v\phi_i(x)$</p>
