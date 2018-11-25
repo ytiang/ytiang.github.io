@@ -14,7 +14,7 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <title>
         
-          我的博客搭建过程2 - Tian&#39;s Blog
+          some thoughts about paper convex fessible set - Tian&#39;s Blog
         
     </title>
 
@@ -91,10 +91,12 @@
                     <div class="post-heading">
                         <div class="tags">
                             
-                              <a class="tag" href="/tags/#Hexo" title="Hexo">Hexo</a>
+                              <a class="tag" href="/tags/#paper" title="paper">paper</a>
+                            
+                              <a class="tag" href="/tags/#convex" title="convex">convex</a>
                             
                         </div>
-                        <h1>我的博客搭建过程2</h1>
+                        <h1>some thoughts about paper convex fessible set</h1>
                         <h2 class="subheading"></h2>
                         <span class="meta">
                             Posted by Tian Yang on
@@ -145,13 +147,6 @@
 
                         
                         <li>
-                            <a href="/about/">About</a>
-                        </li>
-                        
-                    
-
-                        
-                        <li>
                             <a href="/archive/">Archives</a>
                         </li>
                         
@@ -160,6 +155,13 @@
                         
                         <li>
                             <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
                         </li>
                         
                     
@@ -251,19 +253,51 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                <h1 id="论文梳理">论文梳理</h1>
-<h2 id="问题形式">问题形式</h2>
-<p>这篇文章也是采用trajectory optimization的方式来做路径规划，其问题形式为：<br>
-$$\min_{x \in \Gamma}J(x)\tag{1}$$</p>
+                <h1 id="论文梳理"><a href="#论文梳理" class="headerlink" title="论文梳理"></a>论文梳理</h1><h2 id="问题形式"><a href="#问题形式" class="headerlink" title="问题形式"></a>问题形式</h2><p>这篇文章也是采用trajectory optimization的方式来做路径规划，其问题形式为：</p>
+<script type="math/tex; mode=display">\min_{x \in \Gamma}J(x)\tag{1}</script><ul>
+<li><p><strong><font color="red">Assumption 1:</font></strong><br>$J(x):R^n \to R^+$光滑且严格凸</p>
+</li>
+<li><p><strong><font color="red">Assumption 2:</font></strong><br>$\Gamma \subset R^n$是连通且完备的，其绝对补集$\Gamma_c = R^n \backslash \Gamma$是一系列不相交的、由分段光滑函数简单连接的开集或者是一系列<code>disjojint closures</code>；对于每一个在边界$\partial\Gamma$上的点$x$，都能在$\Gamma$中找到一个$n$维的多边形$P$使得$x \in R$.</p>
+</li>
+</ul>
+<h2 id="约束的解析表示形式"><a href="#约束的解析表示形式" class="headerlink" title="约束的解析表示形式"></a>约束的解析表示形式</h2><p>由<strong>assumption2</strong>可知，$\Gamma$能够表示成N个连续、分段光滑的函数：</p>
+<script type="math/tex; mode=display">\Gamma=\bigcap_{i}\{x|\phi_i(x) \ge 0 \}=\bigcap_i{\Gamma_i}\tag{2}</script><p>约束边界表示为$\partial\Gamma_i=\{x|\phi_i(x)=0\}$，内部表示为：$\Gamma_i^o=\{=x|\phi_i(x)&gt;0\}$。其中并不要求$\Gamma_i^c$和$\Gamma^c$具有一样的性质，但N要大于$\Gamma^c$中不相交子集的个数。<br>定义$\phi_i(x)$的方向导数为：</p>
+<script type="math/tex; mode=display">\partial_v\phi_i(x)=\lim_{a\to0^+}\frac{\phi_i(x+av)-\phi_i(x)}{a}\tag{3}</script><p>当函数$\phi_i(x)$在$x$处可导时，$x$处的方向导数为：$\partial_v\phi_i(x)=\nabla\phi_i(x)\cdot v$。也就是说方向导数值是一个标量，其正负表征了函数在此方向上是增大还是减小。</p>
+<p>定义$\phi_i$在$x$处的所有光滑方向为:</p>
+<script type="math/tex; mode=display">S(\phi_i,x)=\{v|\partial_v\phi_i(x) + \partial_{-v}\phi_i(x) = 0\}\tag{4}</script><p>定义$\phi_i$在$x$处的<strong>sub-differential</strong>为：</p>
+<script type="math/tex; mode=display">D\phi_i(x)=\{d \in R^n|d^T \cdot v \le \partial_v\phi_i(x),\forall v \in R^n\}\tag{5}</script><p>当$\phi_i(x)$在$x$处可导时，$D\phi_i(x)=\{\nabla\phi_i(x)\}$</p>
 <ul>
-<li>
-<p><strong><font color="red">Assumption 1:</font></strong><br>
-$J(x):R^n \to R^+$光滑且严格凸</p>
+<li><p><strong><font color="red">Assumption 3:</font></strong><br>1) $\phi_i(x)$是<strong>semi-convex</strong>的，即存在半正定矩阵$H_i^* $，$\forall x, v \in R^n$都有：</p>
+<script type="math/tex; mode=display">\phi_i(x+v)+\phi_i(x-v)-2\phi_i(x) \ge -v^T H_i^* v \tag{6}</script><p>2) 若$D\phi_i(x)$只有一个元素，则该元素不能是0；若$x\in\partial\Gamma_i$，则$0 \notin D\phi_i(x)$<br>3) 所有在边界上的点$x$，都$\exists v \in R^n$，使得$\partial_v\phi_i(x)&lt;0$</p>
+<p>式(6)中若让$H_i^<em> $为0，就变成了凸的条件:可以描述为函数$\phi_i(x)$上任意两点处的函数值的均值要比这两点中点处的函数值大，也等价于任意两点连线上的值都要比函数在两点间的值大.因此式<em>*semi-convex</em></em>感觉像是对凸的一种扩展，允许有局部”凹”，式(6)更一般的形式为：</p>
+<script type="math/tex; mode=display">\phi_i(x+v_1)+\phi_i(x+v_2)-2\phi_i(x+\frac{v_1+v_2}{2}）\ge-(v_1-v_2)^TH_i^* (v_1-v_2))\tag{7}</script><p>甚至可以仿照凸最原始的定义写成：</p>
+<script type="math/tex; mode=display">\lambda\phi_i(x)+(1-\lambda)\phi_i(y)-\phi_i(\lambda x+(1-\lambda)y)\ge\lambda(1-\lambda)(x-y)^TH_i^* (x-y)</script></li>
+<li><p><strong>semi-convex的几条性质</strong><br>$\forall x \in dom\phi_i,\forall v_1,v_2 \in R^n,v=v_1+v_2$都有：<br>1) $\partial_v\phi_i(x)+\partial_{-v}\phi_i(x)\ge 0$<br>2) $b\partial_v\phi_i(x) \ge \partial_{bv}\phi_i(x),\forall b \in R$<br>3) $\partial_{v_1}\phi_i(x)+\partial_{v_2}\phi_i(x)\ge\partial_v\phi_i(x)$</p>
+<p>以上3条性质可以通过取极限轻易证得，其中性质1表明函数在$[-\pi,\pi]$这个方向区间上，每一点处使函数值变大的方向区间大小至少为$[0,\pi]$。这就意味着函数在凹的地方必须可导，不能存在不可导的凹点。</p>
 </li>
-<li>
-<p><strong><font color="red">Assumption 2:</font></strong><br>
-$\Gamma \subset R^n$是连通且完备的，其绝对补集$\Gamma_c = R^n \backslash \Gamma$是一系列不相交的、由分段光滑函数简单连接的开集或者是一系列<code>disjojint closures</code>；对于每一个在边界$\partial\Gamma$上的点$x$，都能在$\Gamma$中找到一个$n$维的多边形$P$使得$x \in R$.</p>
+</ul>
+<h2 id="算法描述"><a href="#算法描述" class="headerlink" title="算法描述"></a>算法描述</h2><p>算法的基本思路是迭代求解：先给定<code>initial guess:</code>$x^0$，逐步迭代求解得到最优解$x^* $。算法在每一步$x^k$附近构造凸可行集$\mathcal{F_i} \subset \Gamma$，在凸可行集$\mathcal{F_i}$中求得最优值得到$x^{k+1}$,如此下去直到满足终止条件。</p>
+<script type="math/tex; mode=display">x^{k+1}=\min_{x \in \mathcal{F_i}}J(x)</script><ul>
+<li><p><strong>如何构造凸可行集CFS？</strong><br>1) 若$\phi_i(x)$是凹的，则$\Gamma_i$是凸的，于是：</p>
+<script type="math/tex; mode=display">\mathcal{F_i}=\Gamma_i</script><p>2) 若$\phi_i(x)$是凸的，则：</p>
+<script type="math/tex; mode=display">\mathcal{F_i}(x_r)=\{x|\phi_i(x_r)+\hat{\nabla}\phi_i(x_r)(x-x_r) \ge 0\}</script><p>3) 若$\phi_i(x)$非凹非凸，则：</p>
+<script type="math/tex; mode=display">\mathcal{F_i}(x_r)=\{x|\phi_i(x_r)+\hat{\nabla}\phi_i(x_r)(x-x_r) \ge \frac{1}{2}(x-x_r)^TH_i^* (x-x_r)\}</script><p>上面的$\hat{\nabla}$均表示次梯度集中的最优方向</p>
 </li>
+<li><p><strong>如何选择最优次梯度方向$\hat{\nabla}$?</strong><br>当$\phi_i(x)$在$x$处可导时，次梯度方向集中只有梯度方向$\nabla\phi_i(x)$，没有选择；当$\phi_i(x)$不可导时：<br>1) 定义参考点$x_r$处的可行搜索方向集：</p>
+<script type="math/tex; mode=display">\mathcal{C}(x_r)=\left\{ \begin{array}{lr}\{v|v=\frac{d}{|d|},d \in R^n\}, \quad if\phi_i(x_r)>0 \\ \{v|v\cdot d \ge 0,d \in D\phi_i(x_r)\}, \quad if\phi_i(x_r)=0  \\ \{v|v\cdot d > 0,d \in D\phi_i(x_r)\}, \quad if\phi_i(x_r)<0\end{array}\right.</script><p>2) 在可行方向中，使得代价J下降最快的方向为：</p>
+<script type="math/tex; mode=display">v_*=\min_{v\in\mathcal{C}(x_r)}\nabla J \cdot v</script><p>3) 最优次梯度方向$d_* = \min_{d\in D\mathcal{F_i}}\nabla \cdot \frac{d}{|d|}$，其中$D\mathcal{F_i}$是可行次梯度方向:</p>
+<script type="math/tex; mode=display">D\mathcal{F_i}=\left\{\begin{array}{lr} D\phi_i(x_r), \quad if \phi_i(x_r)>0 \\ \{d\in D\phi_i(x_r)|d \cdot v^* \ge 0\} , \quad if \phi_i(x_r)=0 \\ \{d\in D\phi_i(x_r)|d \cdot v^* \ge 0\}, \quad if\phi_i(x_r)<0 \end{array}\right.</script></li>
+</ul>
+<h2 id="应用二维无碰撞路径生成"><a href="#应用：二维无碰撞路径生成" class="headerlink" title="应用：二维无碰撞路径生成"></a>应用：二维无碰撞路径生成</h2><p>当给定起始点$x_0$和目标点$G$时，采用时间离散的方式离散出N个路径点，离散的路径可以表示为$[x_0,x_1,…x_N,G]$。目标就是要求解出未知的N个路径点$X=[x_1,x_2,…x_N]$，使得目标函数最小并且满足无碰撞条件。</p>
+<ul>
+<li><p><strong>光滑且严格凸的目标函数</strong><br>一种比较常见的目标函数是来度量路径的平滑度，目标函数越小表示路径越平滑。路径的平滑度一般可以用对整体路径的加速度平方和积分或速度的平方和积分来描述，离散化后表示为：</p>
+<script type="math/tex; mode=display">J(X)=X^TSX</script><p>其中$S$是一阶差分矩阵时，就表示速度的平方和；$S$是二阶差分矩阵时，就表示加速度的平方和。  </p>
+</li>
+<li><p><strong>可通行区域约束的表示</strong><br>假设二维平面上存在有m个障碍物，设$Q_j$表示第j个独立的障碍物，要求每个独立障碍物不能含有凹角，否则构造的$\phi_i(x)$中也会含有凹角，不满足semi-convex的假设。每个独立障碍物可以用连续、分段光滑的函数$\varphi(x)$表示：</p>
+<script type="math/tex; mode=display">Q_j=\{x\in R^2|\varphi(x)<0\}</script><p>1) 若$Q_j$是凸的且封闭的，则$\varphi(x)$可以取<code>signed-distance</code>：</p>
+<script type="math/tex; mode=display">\varphi_j(x)=\left \{\begin{array}{lr} \min_{y\in\partial Q_j}||x-y||, \quad if x \notin Q_j \\ -\min_{y\in\partial Q_j}||x-y||, \quad if x\in Q_j \end{array}\right.</script><p>2) 若$Q_j$是边界，则经过坐标变换后总能使用一个一元函数来描述这个边界：$p_2=f(p_1)$，使用<code>directional signed-distance</code>来描述$\varphi_j(x)$:</p>
+<script type="math/tex; mode=display">\varphi_j(x)=f(p_2)-p_1</script><p>3) 若$Q_j$是非凸但封闭的，直接使用<code>signed-distance</code>的到的$\varphi_j(x)$不满足<code>semi-convex</code>条件，需要使用<code>directional signed distance</code>。设$\hat Q_j$是$Q_j$的最小<code>convex envelop</code>，定义$y\in\partial\hat Q_j$, $\delta(y)$是$y$距$\partial Q_j$上最近的点的距离。于是$\varphi_j(x)$可以定义为：</p>
+<script type="math/tex; mode=display">\varphi_j(x)=\left \{\begin{array}{lr} \min_{y\in\partial \hat Q_j}||x-y||+||y-\delta(y)||, \quad if x \notin \hat Q_j \\ -\min_{y\in\partial \hat Q_j}||x-y||-||y-\delta(y)||, \quad if x\in \hat Q_j \end{array}\right.</script></li>
 </ul>
 
 
@@ -304,7 +338,7 @@ $\Gamma \subset R^n$是连通且完备的，其绝对补集$\Gamma_c = R^n \back
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#论文梳理"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">论文梳理</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#问题形式"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text">问题形式</span></a></li></ol></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#论文梳理"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">论文梳理</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#问题形式"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text">问题形式</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#约束的解析表示形式"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text">约束的解析表示形式</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#算法描述"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text">算法描述</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#应用二维无碰撞路径生成"><span class="toc-nav-number">1.4.</span> <span class="toc-nav-text">应用：二维无碰撞路径生成</span></a></li></ol></li></ol>
         
         </div>
       </aside>
@@ -324,7 +358,9 @@ $\Gamma \subset R^n$是连通且完备的，其绝对补集$\Gamma_c = R^n \back
                     <h5><a href="/tags/">FEATURED TAGS</a></h5>
                     <div class="tags">
                        
-                          <a class="tag" href="/tags/#Hexo" title="Hexo">Hexo</a>
+                          <a class="tag" href="/tags/#paper" title="paper">paper</a>
+                        
+                          <a class="tag" href="/tags/#convex" title="convex">convex</a>
                         
                     </div>
                 </section>
